@@ -1,9 +1,6 @@
 // bind querySelector
 const $ = document.querySelector.bind(document)
-const $$ = document.querySelectorAll.bind(document)
-
-
-
+const $$ =document.querySelectorAll.bind(document)
 
 const app = {
    
@@ -71,8 +68,30 @@ const app = {
             image: "./assets/img/Cyberangel.webp",
             isFavorite: false
         }
-    ]
+    ],
+    render:function(){
+    const htmls =this.songs.map(song =>{
+        
+        return `
+  <div class="song-img" style="background-image: url('${song.image}')" alt="" class="song-image"></div>
+    <div class="body">
+        <h3 class="title">${song.name}</h3>
+        <p class="author">${song.singer}</p>
+    </div>
+    <div class="option">
+        <i class="fas fa-ellipsis-h"></i>
+    </div>
+</div>
 
+ `
+    })
+     $('.playlist').innerHTML = htmls.join ('')
+    }
+    ,
+    start : function(){
+        this.render()
+    }
+     
    
 }
 
