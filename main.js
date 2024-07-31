@@ -1,9 +1,18 @@
 // bind querySelector
 const $ = document.querySelector.bind(document)
 const $$ =document.querySelectorAll.bind(document)
+const player =$('.player')
+const audio= document.querySelector('#audio');
+const heading = document.querySelector('.playing-song-name');
+const cdThumb = document.querySelector('.cd-thumbnail');
+const playBtn = $('.btn-toggle-play')
+const playIcon = playBtn.querySelector('.icon-play');
+const pauseIcon = playBtn.querySelector('.icon-pause');
+const cd =$('.cd')
 
 const app = {
-   
+    currentIndex: 0,
+    isPlaying:false,
     songs: [
         {
             name: "TruE",
@@ -87,24 +96,66 @@ const app = {
     })
      $('.playlist').innerHTML = htmls.join ('')
     },
+    defineProperties: function() {
+        Object.defineProperty(this, 'currentSong', {
+            get: function() {
+                return this.songs[this.currentIndex];
+            }, configurable: true,
+            enumerable: true
+            
+        });
+    },
     handleEvents : function(){
-        const cd =$('.cd')
+         const _this =this
          const cdWidth =cd.offsetWidth
-         
-         
+         //Xu li khi click play
+         playBtn.onclick =function (){
+           if(_this.isPlaying){
+            _this.isPlaying =false
+            audio.pause()
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'inline';
+            player.clasList.remove('song-playing')
+            
+           }
+           else{
+            _this.isPlaying =true 
+            audio.play()
+            playIcon.style.display = 'inline';
+            pauseIcon.style.display = 'none';
+            player.clasList.add('song-playing')
+            
+           }
+
+         }
+         //phong /to thu nho cd
          document.onscroll =function(){
             const scrollTop =window.scrollY || document.documentElement.scrollTop
             const newCdWidth =cdWidth-scrollTop
             cd.style.width =newCdWidth >0 ? newCdWidth + 'px':0;
-            //cd.style.opacity =newCdWidth/cdWidth
+             cd.style.opacity =newCdWidth/cdWidth
         }
 
         
+    },
+    loadCurentSong : function (){
+       
+      heading.textContent =this.currentSong.name
+      audio.src =this.currentSong.path
+      cdThumb.style.backgroundImage =`url(${this.currentSong.image})`
+      console.log(heading,cdThumb,audio)
     }
+    
     ,
     start : function(){
-        this.handleEvents()
-        this.render()
+        // Định nghĩa các thuộc tính cho ibject
+        this.defineProperties(); // Định nghĩa thuộc tính currentSong
+        //Lắng  nghe / xử lý sự kiện (Dom event)
+        this.handleEvents();
+        //Tải thông tin bài hát đầu tiên vào UI khi chạy ứng dụng
+        this.loadCurentSong()
+        //render playlist
+        this.render();
     }
      
    
@@ -112,3 +163,4 @@ const app = {
 
 // starto
 app.start()
+
