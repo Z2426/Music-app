@@ -126,6 +126,11 @@ const app = {
            }
 
          }
+         //Xử lsi khi tua song
+         progress.onchange =function (e){
+            const seekTime =audio.duration/100 *e.target.value
+            audio.currentTime=seekTime
+         }
          //Khi tiến độ bài hát thay đổi
          audio.ontimeupdate =function(){
             if(audio.duration){
