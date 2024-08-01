@@ -12,8 +12,10 @@ const cd =$('.cd')
 const prevBtn =$('.btn-prev')
 const nextBtn =$('.btn-next')
 const progress =$('#progress')
+const randomBtn =$('.btn-shuffle')
 const app = {
     currentIndex: 0,
+    isRandom:false,
     isPlaying:false,
     songs: [
         {
@@ -166,12 +168,32 @@ const app = {
          }
          //next Btn
          nextBtn.onclick =function(){
-            _this.nextSong()
+            if(_this.isRandom){
+               _this.playRandomSong()
+            }else{
+                _this.nextSong()
+
+            }
+           
             audio.play() //? lam sao biet aududio cua phan tu nao
+         }
+         //
+         randomBtn.onclick =function(){
+            _this.isRandom =!_this.isRandom
+            randomBtn.classList.toggle('active',_this.isRandom)
+            _this.playRandomSong()
+        
          }
           //prev Btn
           prevBtn.onclick =function(){
-            _this.prevSong()
+            if(_this.isRandom){
+                _this.playRandomSong()
+            }else{
+                _this.prevSong()
+                
+
+            }
+            
             audio.play() //? lam sao biet aududio cua phan tu nao
          }
          //phong /to thu nho cd
@@ -203,6 +225,15 @@ const app = {
         if(this.currentIndex <0){
             this.currentSong=this.songs.length -1
         }
+        this.loadCurentSong()
+    },
+    playRandomSong:function(){
+        let newIndex 
+        do {
+            newIndex =Math.floor(Math.random()*this.songs.length)
+
+        }while(newIndex ===this.currentIndex)
+        this.currentIndex=newIndex
         this.loadCurentSong()
     }
     
