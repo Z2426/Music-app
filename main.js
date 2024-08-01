@@ -13,10 +13,12 @@ const prevBtn =$('.btn-prev')
 const nextBtn =$('.btn-next')
 const progress =$('#progress')
 const randomBtn =$('.btn-shuffle')
+const repeatBtn =$('.btn-repeat')
 const app = {
     currentIndex: 0,
     isRandom:false,
     isPlaying:false,
+    isRepeat:false,
     songs: [
         {
             name: "TruE",
@@ -112,7 +114,12 @@ const app = {
     handleEvents : function(){
          const _this =this
          const cdWidth =cd.offsetWidth
-         
+         //Xu li lap lai  song
+         repeatBtn.onclick =function(e){
+            _this.isRepeat =!_this.isRepeat
+            repeatBtn.classList.toggle('active',_this.isRepeat)
+
+         }
          //Xử lí CD quay / dừng
          const cdThumbAnimate=cdThumb.animate([
             {transform:'rotate(360deg)'}
@@ -177,6 +184,14 @@ const app = {
            
             audio.play() //? lam sao biet aududio cua phan tu nao
          }
+         //xu li next song khi audio ended
+         audio.onended =function (){
+            if(_this.isRepeat){
+               audio.play()
+            }else{
+                nextBtn.click()
+            }
+         }
          //
          randomBtn.onclick =function(){
             _this.isRandom =!_this.isRandom
@@ -190,8 +205,6 @@ const app = {
                 _this.playRandomSong()
             }else{
                 _this.prevSong()
-                
-
             }
             
             audio.play() //? lam sao biet aududio cua phan tu nao
