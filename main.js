@@ -9,6 +9,8 @@ const playBtn = $('.btn-toggle-play')
 const playIcon = playBtn.querySelector('.icon-play');
 const pauseIcon = playBtn.querySelector('.icon-pause');
 const cd =$('.cd')
+const prevBtn =$('.btn-prev')
+const nextBtn =$('.btn-next')
 const progress =$('#progress')
 const app = {
     currentIndex: 0,
@@ -108,6 +110,7 @@ const app = {
     handleEvents : function(){
          const _this =this
          const cdWidth =cd.offsetWidth
+         
          //Xử lí CD quay / dừng
          const cdThumbAnimate=cdThumb.animate([
             {transform:'rotate(360deg)'}
@@ -161,6 +164,16 @@ const app = {
             cdThumbAnimate.play()
             player.clasList.add('song-playing')
          }
+         //next Btn
+         nextBtn.onclick =function(){
+            _this.nextSong()
+            audio.play() //? lam sao biet aududio cua phan tu nao
+         }
+          //prev Btn
+          prevBtn.onclick =function(){
+            _this.prevSong()
+            audio.play() //? lam sao biet aududio cua phan tu nao
+         }
          //phong /to thu nho cd
          document.onscroll =function(){
             const scrollTop =window.scrollY || document.documentElement.scrollTop
@@ -177,6 +190,20 @@ const app = {
       audio.src =this.currentSong.path
       cdThumb.style.backgroundImage =`url(${this.currentSong.image})`
       console.log(heading,cdThumb,audio)
+    },
+    nextSong : function(){
+        this.currentIndex++
+        if(this.currentIndex >= this.songs.length){
+            this.currentSong=0
+        }
+        this.loadCurentSong()
+    },
+    prevSong : function(){
+        this.currentIndex--
+        if(this.currentIndex <0){
+            this.currentSong=this.songs.length -1
+        }
+        this.loadCurentSong()
     }
     
     ,
