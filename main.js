@@ -9,7 +9,7 @@ const playBtn = $('.btn-toggle-play')
 const playIcon = playBtn.querySelector('.icon-play');
 const pauseIcon = playBtn.querySelector('.icon-pause');
 const cd =$('.cd')
-
+const progress =$('#progress')
 const app = {
     currentIndex: 0,
     isPlaying:false,
@@ -111,22 +111,38 @@ const app = {
          //Xu li khi click play
          playBtn.onclick =function (){
            if(_this.isPlaying){
-            _this.isPlaying =false
             audio.pause()
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'inline';
-            player.clasList.remove('song-playing')
+          
             
            }
            else{
-            _this.isPlaying =true 
             audio.play()
             playIcon.style.display = 'inline';
             pauseIcon.style.display = 'none';
-            player.clasList.add('song-playing')
+            
             
            }
 
+         }
+         //Khi tiến độ bài hát thay đổi
+         audio.ontimeupdate =function(){
+            if(audio.duration){
+                const progressPercent =Math.floor(audio.currentTime *100/audio.duration)
+                progress.value =progressPercent
+         }
+            
+         }
+         //khi song bi páue
+         audio.onpause =function (){
+            _this.isPlaying=false
+            player.clasList.remove("song-playing")
+         }
+         //khi song duoc play
+         audio.onplay =function (){
+            _this.isPlaying =true 
+            player.clasList.add('song-playing')
          }
          //phong /to thu nho cd
          document.onscroll =function(){
