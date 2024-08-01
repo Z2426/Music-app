@@ -108,6 +108,16 @@ const app = {
     handleEvents : function(){
          const _this =this
          const cdWidth =cd.offsetWidth
+         //Xử lí CD quay / dừng
+         const cdThumbAnimate=cdThumb.animate([
+            {transform:'rotate(360deg)'}
+
+         ],{
+            duration : 10000 ,//10second
+            iterations:Infinity
+         }
+        )
+        cdThumbAnimate.pause()
          //Xu li khi click play
          playBtn.onclick =function (){
            if(_this.isPlaying){
@@ -142,11 +152,13 @@ const app = {
          //khi song bi páue
          audio.onpause =function (){
             _this.isPlaying=false
+            cdThumbAnimate.pause()
             player.clasList.remove("song-playing")
          }
          //khi song duoc play
          audio.onplay =function (){
             _this.isPlaying =true 
+            cdThumbAnimate.play()
             player.clasList.add('song-playing')
          }
          //phong /to thu nho cd
